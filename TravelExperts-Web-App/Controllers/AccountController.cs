@@ -12,9 +12,15 @@ using TravelExperts_Web_App.Models;
 
 namespace TravelExperts_Web_App.Controllers
 {
+    /// <summary>
+    /// Methods for user accounts on web app
+    /// </summary>
     [Authorize]
     public class AccountController : Controller
     {
+        // travel experts database entity
+        private TravelExpertsEntities db = new TravelExpertsEntities();
+
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -52,8 +58,10 @@ namespace TravelExperts_Web_App.Controllers
             }
         }
 
-        //
         // GET: /Account/Login
+        /// <summary>
+        /// Serve login page
+        /// </summary>
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -61,8 +69,11 @@ namespace TravelExperts_Web_App.Controllers
             return View();
         }
 
-        //
         // POST: /Account/Login
+        /// <summary>
+        /// Serve login post
+        /// </summary>
+        /// <param name="model">Account info</param>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -91,7 +102,7 @@ namespace TravelExperts_Web_App.Controllers
             }
         }
 
-        //
+        
         // GET: /Account/VerifyCode
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
@@ -104,7 +115,6 @@ namespace TravelExperts_Web_App.Controllers
             return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
-        //
         // POST: /Account/VerifyCode
         [HttpPost]
         [AllowAnonymous]
@@ -134,28 +144,60 @@ namespace TravelExperts_Web_App.Controllers
             }
         }
 
-        //
         // GET: /Account/Register
+        /// <summary>
+        /// Serve registration page
+        /// </summary>
         [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
         }
 
-        //
         // POST: /Account/Register
+        /// <summary>
+        /// Serve registration submit
+        /// </summary>
+        /// <param name="model">Customer info</param>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                // TO DO - REGISTRATION LOGIC
+            // error message assignments
+            string postalError = "";
+            string homePhoneError = "";
+            string busPhoneError = "";
 
+            // some further validation
+            if (ModelState.IsValid && 
+                Validator.IsCanadianPostal(model.CustPostal, out postalError) &&
+                    (Validator.IsCanadianPhoneNumber(model.CustHomePhone, out homePhoneError) || string.IsNullOrEmpty(model.CustHomePhone)) && // databse allows null for home phone number
+                        Validator.IsCanadianPhoneNumber(model.CustBusPhone, out busPhoneError))
+            {
+                // transform form data to customer object 
+                Customer newCustomer = new Customer
+                {
+                    CustomerId = model.CustomerId,
+                    CustFirstName = model.CustFirstName,
+                    CustLastName = model.CustLastName,
+                    CustAddress = model.CustAddress,
+                    CustCity = model.CustCity,
+                    CustProv = model.CustProv,
+                    CustPostal = model.CustPostal,
+                    CustCountry = model.CustCountry,
+                    CustHomePhone = model.CustHomePhone,
+                    CustBusPhone = model.CustBusPhone,
+                    CustEmail = model.CustEmail,
+                    UserName = model.UserName
+                };
+
+                // go do operations on customer table
+                //DoCustomerOperations(newCustomer);
+               
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.CustEmail };
                 var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (result.Succeeded) // registration in Accounts tables success
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
@@ -164,8 +206,32 @@ namespace TravelExperts_Web_App.Controllers
                 AddErrors(result);
             }
 
+            // format phone number errors to be more informative
+            if (!string.IsNullOrEmpty(homePhoneError))
+            {
+                homePhoneError = $"{homePhoneError} (home phone number)";
+                ModelState.AddModelError(string.Empty, homePhoneError);
+            }
+            if (!string.IsNullOrEmpty(busPhoneError))
+            {
+                busPhoneError = $"{busPhoneError} (business phone number)";
+                ModelState.AddModelError(string.Empty, busPhoneError);
+            }
+
+            // add error messages to model
+            ModelState.AddModelError(string.Empty, postalError);
+
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        /// <summary>
+        /// Handle registration operations required on customer table
+        /// </summary>
+        /// <param name="newCustomer">Customer to be added to customer table</param>
+        private void DoCustomerOperations(Customer newCustomer)
+        {
+            return;            
         }
 
         //
