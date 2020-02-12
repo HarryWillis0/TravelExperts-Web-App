@@ -1,3 +1,2 @@
 # TravelExperts-Web-App
-
-* Server-side web application that allows customer registration, login and managing of their account.
+* ASP.NET MVC web application that allows customer registration, login and managing of their account.
