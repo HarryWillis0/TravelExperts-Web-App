@@ -174,7 +174,8 @@ namespace TravelExperts_Web_App.Controllers
                 Validator.IsCanadianPostal(model.CustPostal, out postalError) &&
                     (string.IsNullOrEmpty(model.CustHomePhone) || Validator.IsCanadianPhoneNumber(model.CustHomePhone, out homePhoneError)) && // databse allows null for home phone number
                         Validator.IsCanadianPhoneNumber(model.CustBusPhone, out busPhoneError) &&
-                            TravelExpertsData.IsUniqueEmail(model.CustEmail, out emailError))
+                            TravelExpertsData.IsUniqueEmail(model.CustEmail, out emailError) && 
+                                TravelExpertsData.IsUniquePhone(model.CustBusPhone, out busPhoneError))
             {
                 // transform form data to customer object 
                 Customer newCustomer = new Customer
@@ -192,7 +193,7 @@ namespace TravelExperts_Web_App.Controllers
                     CustEmail = model.CustEmail,
                     UserName = model.UserName
                 };
-
+                
                 // is customer in database and just needs account?
                 if (!TravelExpertsData.CustomerExists(newCustomer)) // customer is not in Customer table, so add (account can't exist if customer is not in customer table)
                     TravelExpertsData.InsertCustomer(newCustomer);

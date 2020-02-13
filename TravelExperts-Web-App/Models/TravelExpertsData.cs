@@ -176,5 +176,21 @@ namespace TravelExperts_Web_App.Models
                 return db.Customers.SingleOrDefault(cust => cust.CustEmail == email);
             }
         }
+
+        public static bool IsUniquePhone(string custPhone, out string error)
+        {
+            using (TravelExpertsEntities db = new TravelExpertsEntities())
+            {
+                var taken = db.Customers.SingleOrDefault(cust => cust.CustBusPhone == custPhone);
+
+                if (taken == null)
+                {
+                    error = "";
+                    return true;
+                }
+                error = "An account is already linked to this phone number.";
+                return false;
+            }
+        }
     }
 }
