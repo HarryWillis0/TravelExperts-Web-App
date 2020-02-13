@@ -124,6 +124,7 @@ namespace TravelExperts_Web_App.Models
 
         [Required]
         [Display(Name = "User Name")]
+        [StringLength(256)]
         public string UserName { get; set; }
 
         [Required]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -18,9 +19,6 @@ namespace TravelExperts_Web_App.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        // travel experts database entity
-        private TravelExpertsEntities db = new TravelExpertsEntities();
-
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -159,6 +157,7 @@ namespace TravelExperts_Web_App.Controllers
         /// Serve registration submit
         /// </summary>
         /// <param name="model">Customer info</param>
+        /// @author - Harry
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -168,12 +167,14 @@ namespace TravelExperts_Web_App.Controllers
             string postalError = "";
             string homePhoneError = "";
             string busPhoneError = "";
+            string emailError = "";
 
             // some further validation
             if (ModelState.IsValid && 
                 Validator.IsCanadianPostal(model.CustPostal, out postalError) &&
-                    (Validator.IsCanadianPhoneNumber(model.CustHomePhone, out homePhoneError) || string.IsNullOrEmpty(model.CustHomePhone)) && // databse allows null for home phone number
-                        Validator.IsCanadianPhoneNumber(model.CustBusPhone, out busPhoneError))
+                    (string.IsNullOrEmpty(model.CustHomePhone) || Validator.IsCanadianPhoneNumber(model.CustHomePhone, out homePhoneError)) && // databse allows null for home phone number
+                        Validator.IsCanadianPhoneNumber(model.CustBusPhone, out busPhoneError) &&
+                            TravelExpertsData.IsUniqueEmail(model.CustEmail, out emailError))
             {
                 // transform form data to customer object 
                 Customer newCustomer = new Customer
@@ -192,9 +193,15 @@ namespace TravelExperts_Web_App.Controllers
                     UserName = model.UserName
                 };
 
-                // go do operations on customer table
-                //DoCustomerOperations(newCustomer);
-               
+                // is customer in database and just needs account?
+                if (!TravelExpertsData.CustomerExists(newCustomer)) // customer is not in Customer table, so add (account can't exist if customer is not in customer table)
+                    TravelExpertsData.InsertCustomer(newCustomer);
+                else if (!TravelExpertsData.AccountExists(newCustomer)) // customer does not have an account 
+                {
+                    TravelExpertsData.UpdateUserName(newCustomer);
+                    TravelExpertsData.UpdateEmail(newCustomer); // lots of empty string emails in Customer table, may as well update with a real email
+                }
+
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.CustEmail };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded) // registration in Accounts tables success
@@ -218,20 +225,15 @@ namespace TravelExperts_Web_App.Controllers
                 ModelState.AddModelError(string.Empty, busPhoneError);
             }
 
+            // email already taken 
+            if (!string.IsNullOrEmpty(emailError))
+                ModelState.AddModelError(string.Empty, emailError);
+
             // add error messages to model
             ModelState.AddModelError(string.Empty, postalError);
 
             // If we got this far, something failed, redisplay form
             return View(model);
-        }
-
-        /// <summary>
-        /// Handle registration operations required on customer table
-        /// </summary>
-        /// <param name="newCustomer">Customer to be added to customer table</param>
-        private void DoCustomerOperations(Customer newCustomer)
-        {
-            return;            
         }
 
         //
