@@ -231,7 +231,8 @@ namespace TravelExperts_Web_App.Controllers
                 ModelState.AddModelError(string.Empty, emailError);
 
             // add error messages to model
-            ModelState.AddModelError(string.Empty, postalError);
+            if (!string.IsNullOrEmpty(postalError))
+                ModelState.AddModelError(string.Empty, postalError);
 
             // If we got this far, something failed, redisplay form
             return View(model);

@@ -100,12 +100,13 @@ namespace TravelExperts_Web_App.Models
     /// @author - Harry
     public class ChangeUserNameViewModel
     {
-        [Required]
-        [StringLength(256)]
+        [Required(ErrorMessage = "Old user name required.")]
+        [StringLength(256, ErrorMessage = "Invalid old user name.")]
         [Display(Name = "Old User Name")]
         public string OldUserName { get; set; }
-        [Required]
-        [StringLength(256)]
+
+        [Required(ErrorMessage = "New user name required.")]
+        [StringLength(256, ErrorMessage = "Invalid new user name.")]
         [Display(Name = "New User Name")]
         public string NewUserName { get; set; }
     }
@@ -116,12 +117,72 @@ namespace TravelExperts_Web_App.Models
     /// @author - Harry
     public class ChangeHomePhoneViewModel
     {
-        [StringLength(20)]
+        [Required(ErrorMessage = "Old phone number required.")]
+        [StringLength(20, ErrorMessage = "Phone number too long.")]
         [Display(Name = "Old Home Phone Number")]
         public string OldHomePhoneNumber { get; set; }
 
-        [StringLength(20)]
+        [StringLength(20, ErrorMessage = "Phone number too long.")]
         [Display(Name = "New Home Phone Number")]
         public string NewHomePhoneNumber { get; set; }
+    }
+
+    /// <summary>
+    /// Model for editing business phone number
+    /// </summary>
+    /// @author - Harry
+    public class ChangeBusPhoneViewModel
+    {
+        [Required(ErrorMessage = "Old phone number required.")]
+        [StringLength(20, ErrorMessage = "Old phone number too long.")]
+        [Display(Name = "Old Businness Phone Number")]
+        public string OldBusPhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "New phone number required.")]
+        [StringLength(20, ErrorMessage = "New phone number too long.")]
+        [Display(Name = "New Business Phone Number")]
+        public string NewBusPhoneNumber { get; set; }
+    }
+    
+    /// <summary>
+    /// Model for editing address
+    /// </summary>
+    /// @author - Harry
+    public class ChangeAddressViewModel
+    {
+        [Required(ErrorMessage = "Address is required.")]
+        [StringLength(75, ErrorMessage = "Address too long.")]
+        [Display(Name = "Address")]
+        public string NewAddress { get; set; }
+
+        [Required(ErrorMessage = "City is required.")]
+        [StringLength(75, ErrorMessage = "City too long.")]
+        public string  NewCity { get; set; }
+
+        [Required(ErrorMessage = "Province is required.")]
+        [StringLength(2, ErrorMessage = "Province too long. Use province abbreviation.")]
+        public string NewProv { get; set; }
+
+        [Required(ErrorMessage = "Postal code required.")]
+        [StringLength(2, ErrorMessage = "Postal code too long.")]
+        public string NewPostal { get; set; }
+
+        [StringLength(25, ErrorMessage = "Country too long.")]
+        public string NewCountry { get; set; }
+    }
+
+    /// <summary>
+    /// Model for editing email
+    /// </summary>
+    /// @author - Harry
+    public class ChangeEmailViewModel
+    {
+        [Required(ErrorMessage = "Old email is required.")]
+        [StringLength(50, ErrorMessage = "Old email too long.")]
+        public string OldEmail { get; set; }
+        
+        [Required(ErrorMessage = "New email is required.")]
+        [StringLength(50, ErrorMessage = "New email too long.")]
+        public string NewEmail { get; set; }
     }
 }

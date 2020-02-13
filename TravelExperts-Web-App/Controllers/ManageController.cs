@@ -52,7 +52,7 @@ namespace TravelExperts_Web_App.Controllers
 
         //
         // GET: /Manage/Index
-        public async Task<ActionResult> Index(ManageMessageId? message)
+        public ActionResult Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
@@ -68,6 +68,7 @@ namespace TravelExperts_Web_App.Controllers
             {
                 HasPassword = HasPassword(),
                 UserName = User.Identity.GetUserName()
+                // TO DO GET MODEL VALUES
 
             };
             return View(model);
@@ -78,6 +79,7 @@ namespace TravelExperts_Web_App.Controllers
         /// <summary>
         /// Serve change user name page
         /// </summary>
+        /// @author - Harry
         public ActionResult ChangeUserName()
         {
             return View();
@@ -87,6 +89,7 @@ namespace TravelExperts_Web_App.Controllers
         /// Serve change user name post
         /// </summary>
         /// <param name="model">form data</param>
+        /// @author - Harry
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ChangeUserName(ChangeUserNameViewModel model)
@@ -100,6 +103,7 @@ namespace TravelExperts_Web_App.Controllers
         /// <summary>
         /// Serve change home phone number page
         /// </summary>
+        /// @author - Harry
         public ActionResult ChangeHomePhone()
         {
             return View();
@@ -109,6 +113,7 @@ namespace TravelExperts_Web_App.Controllers
         /// Serve change Home phone number post
         /// </summary>
         /// <param name="model">form data</param>
+        /// @author - Harry
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ChangeHomePhone(ChangeHomePhoneViewModel model)
@@ -116,6 +121,79 @@ namespace TravelExperts_Web_App.Controllers
             // TO DO - IMPLEMENT
             throw new NotImplementedException();
         }
+
+        //
+        // GET: /Manage/ChangeBusPhone
+        /// <summary>
+        /// Serve change business phone number page
+        /// </summary>
+        /// @author - Harry
+        public ActionResult ChangeBusPhone()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Serve change business phone number post
+        /// </summary>
+        /// <param name="model">form data</param>
+        /// @author - Harry
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeBusPhone(ChangeBusPhoneViewModel model)
+        {
+            // TO DO - IMPLEMENT
+            throw new NotImplementedException();
+        }
+
+        //
+        // GET: /Manage/ChangeAddress
+        /// <summary>
+        /// Serve change address page
+        /// </summary>
+        /// @author - Harry
+        public ActionResult ChangeAddress()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Serve change address post
+        /// </summary>
+        /// <param name="model">form data</param>
+        /// @author - Harry
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeAddress(ChangeAddressViewModel model)
+        {
+            // TO DO - IMPLEMENT
+            throw new NotImplementedException();
+        }
+
+        //
+        // GET: /Manage/ChangeEmail
+        /// <summary>
+        /// Serve change email page
+        /// </summary>
+        /// @author - Harry
+        public ActionResult ChangeEmail()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Serve change email post
+        /// </summary>
+        /// <param name="model">form data</param>
+        /// @author - Harry
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangeEmail(ChangeEmailViewModel model)
+        {
+            // TO DO - IMPLEMENT
+            throw new NotImplementedException();
+        }
+
 
         //
         // GET: /Manage/ChangePassword
