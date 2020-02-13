@@ -36,23 +36,17 @@ namespace TravelExperts_Web_App.Models
         /// <returns>True if account exists, false otherwise</returns>
         public static bool AccountExists(Customer customer)
         {
-            using (TravelExpertsEntities db = new TravelExpertsEntities())
+            if(CustomerExists(customer)) // customer exists in Customer table - if customer is not in customer table, they can't be in accounts table
             {
-                // find customer by phone number
-                var customerResult = db.Customers.SingleOrDefault(cust => cust.CustBusPhone == customer.CustBusPhone);
-                
-                if(customerResult != null) // customer exists in Customer table
+                using (AccountEntities accntDB = new AccountEntities())
                 {
-                    using (AccountEntities accntDB = new AccountEntities())
-                    {
-                        // find account by email
-                        var accntResult = accntDB.AspNetUsers.SingleOrDefault(accnt => accnt.Email == customer.CustEmail);
+                    // find account by email
+                    var accntResult = accntDB.AspNetUsers.SingleOrDefault(accnt => accnt.Email == customer.CustEmail);
 
-                        return accntResult != null; // customer exists in customer table and has a login account in AspNetUsers table
-                    }
+                    return accntResult != null; // customer exists in customer table and has a login account in AspNetUsers table
                 }
-                return false;
             }
+            return false;
         }
 
         /// <summary>

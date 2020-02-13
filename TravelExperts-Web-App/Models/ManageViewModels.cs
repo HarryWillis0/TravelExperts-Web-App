@@ -12,6 +12,16 @@ namespace TravelExperts_Web_App.Models
         public string PhoneNumber { get; set; }
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
+        public string FullName { get; set; }
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string Prov { get; set; }
+        public string Postal { get; set; }
+        public string Country { get; set; }
+        public string HomePhone { get; set; }
+        public string BusPhone { get; set; }
+        public string Email { get; set; }
+        public string UserName { get; set; }
     }
 
     public class ManageLoginsViewModel
@@ -82,5 +92,36 @@ namespace TravelExperts_Web_App.Models
     {
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
+    }
+
+    /// <summary>
+    /// Model for editing user name
+    /// </summary>
+    /// @author - Harry
+    public class ChangeUserNameViewModel
+    {
+        [Required]
+        [StringLength(256)]
+        [Display(Name = "Old User Name")]
+        public string OldUserName { get; set; }
+        [Required]
+        [StringLength(256)]
+        [Display(Name = "New User Name")]
+        public string NewUserName { get; set; }
+    }
+
+    /// <summary>
+    /// Model for editing home phone number
+    /// </summary>
+    /// @author - Harry
+    public class ChangeHomePhoneViewModel
+    {
+        [StringLength(20)]
+        [Display(Name = "Old Home Phone Number")]
+        public string OldHomePhoneNumber { get; set; }
+
+        [StringLength(20)]
+        [Display(Name = "New Home Phone Number")]
+        public string NewHomePhoneNumber { get; set; }
     }
 }

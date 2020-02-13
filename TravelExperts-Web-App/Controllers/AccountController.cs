@@ -197,11 +197,12 @@ namespace TravelExperts_Web_App.Controllers
                 if (!TravelExpertsData.CustomerExists(newCustomer)) // customer is not in Customer table, so add (account can't exist if customer is not in customer table)
                     TravelExpertsData.InsertCustomer(newCustomer);
                 else if (!TravelExpertsData.AccountExists(newCustomer)) // customer does not have an account 
-                {
-                    TravelExpertsData.UpdateUserName(newCustomer);
-                    TravelExpertsData.UpdateEmail(newCustomer); // lots of empty string emails in Customer table, may as well update with a real email
+                { // Customer exists in Customer table but not in Accounts table
+                    TravelExpertsData.UpdateUserName(newCustomer); // add user name to Customer Table and AspNetUsers table
+                    TravelExpertsData.UpdateEmail(newCustomer); // lots of empty string emails in Customer table, may as well update here
                 }
 
+                // auto-generated - create User
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.CustEmail };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded) // registration in Accounts tables success
