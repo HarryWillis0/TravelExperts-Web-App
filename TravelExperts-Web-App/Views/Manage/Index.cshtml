@@ -2,18 +2,55 @@
 @{
     ViewBag.Title = "Manage";
 }
-
-<h2>Your Account</h2>
+<!-- 
+    Managing account index page
+    
+    author  - harry
+-->
+<h2>@Html.DisplayFor(m => m.FirstName)'s Account</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
+<p class="text-danger">@ViewBag.ErrorMsg</p>
 <div>
-    <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>User Name: </dt>
-        <dd>
-            @Html.DisplayFor(m => m.UserName) | [@Html.ActionLink("Change", "ChangeUserName")]
+        <!-- user name -->
+        <dt>User Name:</dt>
+        <dd class="container">
+            @Html.DisplayFor(m => m.UserName) [@Html.ActionLink("Change", "ChangeUserName")]
         </dd>
+
+        <!-- email -->
+        <dt>Email:</dt>
+        <dd>
+            @Html.DisplayFor(m => m.Email) | [@Html.ActionLink("Change", "ChangeEmail")]
+        </dd>
+
+        <!-- home phone number -->
+        <dt>Home Number:</dt>
+        <dd>
+            @Html.DisplayFor(m => m.HomePhone) | [@Html.ActionLink("Change", "ChangeHomePhone")]
+        </dd>
+
+        <!-- business phone number -->
+        <dt>Business  Number:</dt>
+        <dd>
+            @Html.DisplayFor(m => m.BusPhone) | [@Html.ActionLink("Change", "ChangeBusPhone")]
+        </dd>
+
+        <!-- address -->
+        <dt>Address:</dt>
+        <dd>
+            @Html.DisplayFor(m => m.Address) | [@Html.ActionLink("Change", "ChangeAddress")]
+        </dd>
+        <dd>    
+            @Html.DisplayFor(m => m.City), @Html.DisplayFor(m => m.Prov)
+        </dd>
+        <dd>    
+            @Html.DisplayFor(m => m.Postal)
+        </dd>
+
+        <!-- password -->
         <dt>Password:</dt>
         <dd>
             [@Html.ActionLink("Change", "ChangePassword")]

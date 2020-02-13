@@ -64,12 +64,33 @@ namespace TravelExperts_Web_App.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
+
+            // get current customer email
+            string email = TravelExpertsData.GetEmailInAccount(userId);
+
+            // get current customer by email
+            Customer curr = TravelExpertsData.GetCustomer(email);
+
+            if (email == null || curr == null) // couldn't find account or user
+            {
+                ViewBag.ErrorMsg = "We're sorry, an error has occured while trying to get your information.";
+                return View();
+            }
+
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
-                UserName = User.Identity.GetUserName()
-                // TO DO GET MODEL VALUES
-
+                UserName = User.Identity.GetUserName(),
+                FirstName = curr.CustFirstName,
+                LastName = curr.CustLastName,
+                Address = curr.CustAddress,
+                City = curr.CustCity,
+                Prov = curr.CustProv,
+                Postal = curr.CustPostal,
+                Country = curr.CustCountry,
+                HomePhone = curr.CustHomePhone,
+                BusPhone = curr.CustBusPhone,
+                Email = curr.CustEmail
             };
             return View(model);
         }

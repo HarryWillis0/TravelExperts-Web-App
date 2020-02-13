@@ -155,5 +155,26 @@ namespace TravelExperts_Web_App.Models
                 return false;
             }
         }
+
+        /// <summary>
+        /// Find an account by user id 
+        /// </summary>
+        /// <param name="userId">identification for account</param>
+        /// <returns>The email of the account</returns>
+        public static string GetEmailInAccount(string userId)
+        {
+            using (AccountEntities db = new AccountEntities())
+            {
+                return db.AspNetUsers.SingleOrDefault(accnt => accnt.Id == userId).Email;
+            }
+        }
+
+        public static Customer GetCustomer(string email)
+        {
+            using (TravelExpertsEntities db = new TravelExpertsEntities())
+            {
+                return db.Customers.SingleOrDefault(cust => cust.CustEmail == email);
+            }
+        }
     }
 }
