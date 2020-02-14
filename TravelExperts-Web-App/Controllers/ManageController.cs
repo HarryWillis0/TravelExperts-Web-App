@@ -58,7 +58,7 @@ namespace TravelExperts_Web_App.Controllers
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
+                : message == ManageMessageId.Error ? "An error has occurred. Unable to perform change."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.EditPhoneSuccess ? "Phone number changed."
                 : message == ManageMessageId.EditAddressSuccess ? "Address changed."
@@ -124,8 +124,11 @@ namespace TravelExperts_Web_App.Controllers
                     return View();
                 }
                 curr.UserName = model.NewUserName;
-                TravelExpertsData.UpdateUserName(curr);
-                return RedirectToAction("Index", new { Message = ManageMessageId.EditUserNameSuccess });
+                if (TravelExpertsData.UpdateUserName(curr))
+                    return RedirectToAction("Index", new { Message = ManageMessageId.EditUserNameSuccess });
+
+                // something went wrong
+                return RedirectToAction("Index", new { Message = ManageMessageId.Error });
             }
             ModelState.AddModelError(String.Empty, "Account is already linked to this user name.");
             return View();
@@ -163,14 +166,15 @@ namespace TravelExperts_Web_App.Controllers
                     return View();
                 }
                 curr.CustHomePhone = model.NewHomePhoneNumber;
-                model.Update(curr);
-                return RedirectToAction("Index", new { Message = ManageMessageId.EditPhoneSuccess });
+                if (model.Update(curr))
+                    return RedirectToAction("Index", new { Message = ManageMessageId.EditPhoneSuccess });
+                // something went wrong
+                return RedirectToAction("Index", new { Message = ManageMessageId.Error });
             }
             ModelState.AddModelError(String.Empty, "Invalid phone number.");
             return View();
         }
 
-        // TO DO ADD VIEW
         // GET: /Manage/ChangeBusPhone
         /// <summary>
         /// Serve change business phone number page
@@ -202,21 +206,22 @@ namespace TravelExperts_Web_App.Controllers
                     ModelState.AddModelError(String.Empty, "Sorry an error occured while trying to find you. Please try log in again.");
                     return View();
                 }
-                curr.CustHomePhone = model.NewBusPhoneNumber;
-                model.Update(curr);
-                return RedirectToAction("Index", new { Message = ManageMessageId.EditPhoneSuccess });
+                curr.CustBusPhone = model.NewBusPhoneNumber;
+                if (model.Update(curr))
+                    return RedirectToAction("Index", new { Message = ManageMessageId.EditPhoneSuccess });
+                // something went wrong
+                return RedirectToAction("Index", new { Message = ManageMessageId.Error });
             }
 
             // made it here, something went wrong
             if (!string.IsNullOrEmpty(invalid))
                 ModelState.AddModelError(String.Empty, "Invalid phone number.");
-            if (string.IsNullOrEmpty(notUnique))
-                ModelState.AddModelError(String.Empty, "Account is already linked to this number.");
+            if (!string.IsNullOrEmpty(notUnique))
+                ModelState.AddModelError(String.Empty, "An account is already linked to this number.");
 
             return View();
         }
 
-        // TODO ADD VIEW
         // GET: /Manage/ChangeAddress
         /// <summary>
         /// Serve change address page
@@ -252,11 +257,13 @@ namespace TravelExperts_Web_App.Controllers
                 curr.CustCity = model.NewCity;
                 curr.CustPostal = model.NewPostal;
                 curr.CustCountry = model.NewCountry;
-                model.Update(curr);
-                return RedirectToAction("Index", new { Message = ManageMessageId.EditAddressSuccess });
+                if (model.Update(curr))
+                    return RedirectToAction("Index", new { Message = ManageMessageId.EditPhoneSuccess });
+                // something went wrong
+                return RedirectToAction("Index", new { Message = ManageMessageId.Error });
             }
 
-            // made it here, something went wrong
+            // made it here, something went wrong with data
             if (!string.IsNullOrEmpty(invalid))
                 ModelState.AddModelError(String.Empty, "Invalid postal code.");
 

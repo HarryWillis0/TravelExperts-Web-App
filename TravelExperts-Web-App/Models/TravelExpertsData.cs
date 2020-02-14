@@ -66,8 +66,11 @@ namespace TravelExperts_Web_App.Models
         /// Update a customer's user name in AspNetUsers table AND Customers table
         /// </summary>
         /// <param name="newCustomer">Customer object to update in database</param>
-        public static void UpdateUserName(Customer newCustomer)
+        /// <returns>True on success, false otherwise</returns>
+        public static bool UpdateUserName(Customer newCustomer)
         {
+            bool flag = false;
+            // update accounts table
             using (AccountEntities db = new AccountEntities())
             {
                 // get account from AspNetUsers table by email
@@ -76,18 +79,25 @@ namespace TravelExperts_Web_App.Models
                 {
                     account.UserName = newCustomer.UserName;
                     db.SaveChanges();
+                    flag = true;
                 }
             }
 
+            // update customer table
             using (TravelExpertsEntities db = new TravelExpertsEntities())
             {
                 // get customer from Customer table by phone number
                 var customer = db.Customers.SingleOrDefault(cust => cust.CustBusPhone == newCustomer.CustBusPhone);
                 if(customer != null) // found customer
                 {
-                    customer.UserName = newCustomer.UserName;
-                    db.SaveChanges();
+                    if (flag) // make sure update in account table succeeded
+                    {
+                        customer.UserName = newCustomer.UserName;
+                        db.SaveChanges();
+                        return true;
+                    }
                 }
+                return false; // one or both failed
             }
         }
         
@@ -95,8 +105,11 @@ namespace TravelExperts_Web_App.Models
         /// Update a customer's email in AspNetUsers table and Customers table
         /// </summary>
         /// <param name="customer">Customer to update</param>
-        public static void UpdateEmail(Customer customer)
+        /// <returns>True on success, false otherwise</returns>
+        public static bool UpdateEmail(Customer customer)
         {
+            bool flag = false;
+            // update accounts table
             using (AccountEntities db = new AccountEntities())
             {
                 // get account from AspNetUsers table by email
@@ -105,18 +118,25 @@ namespace TravelExperts_Web_App.Models
                 {
                     account.Email = customer.CustEmail;
                     db.SaveChanges();
+                    flag = true;
                 }
             }
 
+            // update customers table
             using (TravelExpertsEntities db = new TravelExpertsEntities())
             {
                 // get customer from Customer table by phone number
                 var cust = db.Customers.SingleOrDefault(c => c.CustBusPhone == customer.CustBusPhone);
                 if (customer != null) // found customer
                 {
-                    cust.CustEmail = customer.CustEmail;
-                    db.SaveChanges();
+                    if (flag) // make sure update in acounts table succeeded
+                    {
+                        cust.CustEmail = customer.CustEmail;
+                        db.SaveChanges();
+                        return true;
+                    }
                 }
+                return false; // one or both failed
             }
         }
 

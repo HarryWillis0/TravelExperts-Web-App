@@ -20,9 +20,12 @@ namespace TravelExperts_Web_App.Models
         public string Prov { get; set; }
         public string Postal { get; set; }
         public string Country { get; set; }
+        [Display(Name = "Home Number")]
         public string HomePhone { get; set; }
+        [Display(Name = "Business Number")]
         public string BusPhone { get; set; }
         public string Email { get; set; }
+        [Display(Name = "User Name")]
         public string UserName { get; set; }
     }
 
@@ -121,8 +124,9 @@ namespace TravelExperts_Web_App.Models
         /// <summary>
         /// Update cusomter with new home phone number
         /// </summary>
+        /// <returns>true on success, false otherwise</returns>
         /// <param name="customer">updated customer</param>
-        public void Update(Customer customer)
+        public bool Update(Customer customer)
         {
             using (TravelExpertsEntities db = new TravelExpertsEntities())
             {
@@ -132,7 +136,9 @@ namespace TravelExperts_Web_App.Models
                 {
                     cust.CustHomePhone = customer.CustHomePhone;
                     db.SaveChanges();
+                    return true;
                 }
+                return false;
             }
         }
     }
@@ -143,6 +149,8 @@ namespace TravelExperts_Web_App.Models
     /// @author - Harry
     public class ChangeBusPhoneViewModel
     {
+
+
         [Required(ErrorMessage = "New phone number required.")]
         [StringLength(20, ErrorMessage = "New phone number too long.")]
         [Display(Name = "New Business Phone Number")]
@@ -152,17 +160,38 @@ namespace TravelExperts_Web_App.Models
         /// Update cusomter with new business phone number
         /// </summary>
         /// <param name="customer">updated customer</param>
-        public void Update(Customer customer)
+        /// <returns>True on success, false otherwise</returns>
+        public bool Update(Customer customer)
         {
+            bool flag = false;
+            // update in customers table
             using (TravelExpertsEntities db = new TravelExpertsEntities())
             {
-                // get customer from Customer table by phone number
-                var cust = db.Customers.SingleOrDefault(c => c.CustBusPhone == customer.CustBusPhone);
-                if (cust != null) // found customer and there is not account linked to number
+                // get customer from Customer table by email
+                var cust = db.Customers.SingleOrDefault(c => c.CustEmail == customer.CustEmail);
+                if (cust != null) // found customer
                 {
                     cust.CustBusPhone = customer.CustBusPhone;
                     db.SaveChanges();
+                    flag = true;
                 }
+            }
+
+            // update in accounts table
+            using (AccountEntities db = new AccountEntities()) 
+            {
+                // get account 
+                var account = db.AspNetUsers.SingleOrDefault(accnt => accnt.Email == customer.CustEmail);
+                if (account != null) // found account
+                {
+                    if (flag) // make sure customers table update succesfully
+                    {
+                        account.PhoneNumber = customer.CustBusPhone;
+                        db.SaveChanges();
+                        return true;
+                    }
+                }
+                return false; // one or both failed
             }
         }
     }
@@ -180,24 +209,29 @@ namespace TravelExperts_Web_App.Models
 
         [Required(ErrorMessage = "City is required.")]
         [StringLength(75, ErrorMessage = "City too long.")]
+        [Display(Name = "City")]
         public string NewCity { get; set; }
 
         [Required(ErrorMessage = "Province is required.")]
         [StringLength(2, ErrorMessage = "Province too long. Use province abbreviation.")]
+        [Display(Name = "Province")]
         public string NewProv { get; set; }
 
         [Required(ErrorMessage = "Postal code required.")]
-        [StringLength(2, ErrorMessage = "Postal code too long.")]
+        [StringLength(7, ErrorMessage = "Postal code too long.")]
+        [Display(Name = "Postal Code")]
         public string NewPostal { get; set; }
 
         [StringLength(25, ErrorMessage = "Country too long.")]
+        [Display(Name = "Country")]
         public string NewCountry { get; set; }
 
         /// <summary>
         /// Update customer with new address
         /// </summary>
         /// <param name="customer">updated customer</param>
-        public void Update(Customer customer)
+        /// <returns>True on success, false otherwise</returns>
+        public bool Update(Customer customer)
         {
             using (TravelExpertsEntities db = new TravelExpertsEntities())
             {
@@ -211,7 +245,9 @@ namespace TravelExperts_Web_App.Models
                     cust.CustPostal = customer.CustPostal;
                     cust.CustCountry = customer.CustCountry;
                     db.SaveChanges();
+                    return true;
                 }
+                return false;
             }
         }
     }
