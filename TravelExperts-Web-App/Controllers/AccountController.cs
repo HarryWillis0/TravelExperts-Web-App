@@ -199,8 +199,8 @@ namespace TravelExperts_Web_App.Controllers
                     TravelExpertsData.InsertCustomer(newCustomer);
                 else if (!TravelExpertsData.AccountExists(newCustomer)) // customer does not have an account 
                 { // Customer exists in Customer table but not in Accounts table
-                    TravelExpertsData.UpdateUserName(newCustomer); // add user name to Customer Table and AspNetUsers table
-                    TravelExpertsData.UpdateEmail(newCustomer); // lots of empty string emails in Customer table, may as well update here
+                    TravelExpertsData.UpdateCustomerUserName(newCustomer); // add user name to Customer Table and AspNetUsers table
+                    TravelExpertsData.UpdateCustomerEmail(newCustomer); // lots of empty string emails in Customer table, may as well update here
                 }
 
                 // auto-generated - create User

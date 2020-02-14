@@ -67,9 +67,8 @@ namespace TravelExperts_Web_App.Models
         /// </summary>
         /// <param name="newCustomer">Customer object to update in database</param>
         /// <returns>True on success, false otherwise</returns>
-        public static bool UpdateUserName(Customer newCustomer)
+        public static bool UpdateAccountUserName(Customer newCustomer)
         {
-            bool flag = false;
             // update accounts table
             using (AccountEntities db = new AccountEntities())
             {
@@ -79,10 +78,14 @@ namespace TravelExperts_Web_App.Models
                 {
                     account.UserName = newCustomer.UserName;
                     db.SaveChanges();
-                    flag = true;
+                    return true;
                 }
+                return false;
             }
+        }
 
+        public static bool UpdateCustomerUserName (Customer newCustomer) 
+        {
             // update customer table
             using (TravelExpertsEntities db = new TravelExpertsEntities())
             {
@@ -90,25 +93,21 @@ namespace TravelExperts_Web_App.Models
                 var customer = db.Customers.SingleOrDefault(cust => cust.CustBusPhone == newCustomer.CustBusPhone);
                 if(customer != null) // found customer
                 {
-                    if (flag) // make sure update in account table succeeded
-                    {
-                        customer.UserName = newCustomer.UserName;
-                        db.SaveChanges();
-                        return true;
-                    }
+                    customer.UserName = newCustomer.UserName;
+                    db.SaveChanges();
+                    return true;
                 }
                 return false; // one or both failed
             }
         }
-        
+
         /// <summary>
         /// Update a customer's email in AspNetUsers table and Customers table
         /// </summary>
         /// <param name="customer">Customer to update</param>
         /// <returns>True on success, false otherwise</returns>
-        public static bool UpdateEmail(Customer customer)
+        public static bool UpdateAccountEmail(Customer customer)
         {
-            bool flag = false;
             // update accounts table
             using (AccountEntities db = new AccountEntities())
             {
@@ -118,10 +117,14 @@ namespace TravelExperts_Web_App.Models
                 {
                     account.Email = customer.CustEmail;
                     db.SaveChanges();
-                    flag = true;
+                    return true;
                 }
+                return false;
             }
+        }
 
+        public static bool UpdateCustomerEmail(Customer customer) 
+        { 
             // update customers table
             using (TravelExpertsEntities db = new TravelExpertsEntities())
             {
@@ -129,12 +132,9 @@ namespace TravelExperts_Web_App.Models
                 var cust = db.Customers.SingleOrDefault(c => c.CustBusPhone == customer.CustBusPhone);
                 if (customer != null) // found customer
                 {
-                    if (flag) // make sure update in acounts table succeeded
-                    {
-                        cust.CustEmail = customer.CustEmail;
-                        db.SaveChanges();
-                        return true;
-                    }
+                    cust.CustEmail = customer.CustEmail;
+                    db.SaveChanges();
+                    return true;
                 }
                 return false; // one or both failed
             }

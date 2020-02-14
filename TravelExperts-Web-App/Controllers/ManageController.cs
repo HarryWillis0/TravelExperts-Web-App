@@ -126,7 +126,7 @@ namespace TravelExperts_Web_App.Controllers
                     return View();
                 }
                 curr.UserName = model.NewUserName;
-                if (TravelExpertsData.UpdateUserName(curr))
+                if (TravelExpertsData.UpdateCustomerUserName(curr) && TravelExpertsData.UpdateAccountUserName(curr))
                     return RedirectToAction("Index", new { Message = ManageMessageId.EditUserNameSuccess });
 
                 // something went wrong
