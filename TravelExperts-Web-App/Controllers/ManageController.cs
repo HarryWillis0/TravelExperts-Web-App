@@ -61,6 +61,7 @@ namespace TravelExperts_Web_App.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.EditPhoneSuccess ? "Phone number changed."
+                : message == ManageMessageId.EditAddressSuccess? "Address changed."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
 
@@ -135,8 +136,8 @@ namespace TravelExperts_Web_App.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeHomePhone(ChangeHomePhoneViewModel model)
         {
-            string error = "";
-            if(Validator.IsCanadianPhoneNumber(model.NewHomePhoneNumber, out error))
+            if (string.IsNullOrEmpty(model.NewHomePhoneNumber) ||
+                    Validator.IsCanadianPhoneNumber(model.NewHomePhoneNumber, out _))
             {
                 Customer curr = GetCurrentCustomer();
 
@@ -147,14 +148,14 @@ namespace TravelExperts_Web_App.Controllers
                     return View();
                 }
                 curr.CustHomePhone = model.NewHomePhoneNumber;
-                TravelExpertsData.UpdateHomePhone(curr);
+                model.Update(curr);
                 return RedirectToAction("Index", new { Message = ManageMessageId.EditPhoneSuccess });
             }
             ModelState.AddModelError(String.Empty, "Invalid phone number.");
             return View();
         }
 
-        //
+        // TO DO ADD VIEW
         // GET: /Manage/ChangeBusPhone
         /// <summary>
         /// Serve change business phone number page
@@ -174,11 +175,33 @@ namespace TravelExperts_Web_App.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeBusPhone(ChangeBusPhoneViewModel model)
         {
-            // TO DO - IMPLEMENT
-            throw new NotImplementedException();
+            string notUnique = "";
+            if (Validator.IsCanadianPhoneNumber(model.NewBusPhoneNumber, out string invalid) &&
+                    TravelExpertsData.IsUniquePhone(model.NewBusPhoneNumber, out notUnique))
+            {
+                Customer curr = GetCurrentCustomer();
+
+                // make sure we found customer
+                if (curr == null)
+                {
+                    ModelState.AddModelError(String.Empty, "Sorry an error occured while trying to find you. Please try log in again.");
+                    return View();
+                }
+                curr.CustHomePhone = model.NewBusPhoneNumber;
+                model.Update(curr);
+                return RedirectToAction("Index", new { Message = ManageMessageId.EditPhoneSuccess });
+            }
+
+            // made it here, something went wrong
+            if (!string.IsNullOrEmpty(invalid))
+                ModelState.AddModelError(String.Empty, "Invalid phone number.");
+            if (string.IsNullOrEmpty(notUnique))
+                ModelState.AddModelError(String.Empty, "Account is already linked to this number.");
+
+            return View();
         }
 
-        //
+        // TODO ADD VIEW
         // GET: /Manage/ChangeAddress
         /// <summary>
         /// Serve change address page
@@ -198,11 +221,34 @@ namespace TravelExperts_Web_App.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeAddress(ChangeAddressViewModel model)
         {
-            // TO DO - IMPLEMENT
-            throw new NotImplementedException();
+            if (Validator.IsCanadianPostal(model.NewPostal, out string invalid)) 
+            { 
+                Customer curr = GetCurrentCustomer();
+
+                // make sure we found customer
+                if (curr == null)
+                {
+                    ModelState.AddModelError(String.Empty, "Sorry an error occured while trying to find you. Please try log in again.");
+                    return View();
+                }
+                curr.CustAddress = model.NewAddress;
+                curr.CustCity = model.NewCity;
+                curr.CustProv = model.NewProv;
+                curr.CustCity = model.NewCity;
+                curr.CustPostal = model.NewPostal;
+                curr.CustCountry = model.NewCountry;
+                model.Update(curr);
+                return RedirectToAction("Index", new { Message = ManageMessageId.EditAddressSuccess });
+            }
+
+            // made it here, something went wrong
+            if (!string.IsNullOrEmpty(invalid))
+                ModelState.AddModelError(String.Empty, "Invalid postal code.");
+
+            return View();
         }
 
-        //
+        // TO DO ADD VIEW
         // GET: /Manage/ChangeEmail
         /// <summary>
         /// Serve change email page
@@ -336,7 +382,8 @@ namespace TravelExperts_Web_App.Controllers
             RemoveLoginSuccess,
             RemovePhoneSuccess,
             Error,
-            EditPhoneSuccess
+            EditPhoneSuccess,
+            EditAddressSuccess
         }
 
 #endregion

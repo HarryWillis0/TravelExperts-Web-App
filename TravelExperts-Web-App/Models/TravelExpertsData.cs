@@ -121,24 +121,6 @@ namespace TravelExperts_Web_App.Models
         }
 
         /// <summary>
-        /// Update a customer's email in AspNetUsers table and Customers table
-        /// </summary>
-        /// <param name="customer">Customer to update</param>
-        public static void UpdateHomePhone(Customer customer)
-        {
-            using (TravelExpertsEntities db = new TravelExpertsEntities())
-            {
-                // get customer from Customer table by phone number
-                var cust = db.Customers.SingleOrDefault(c => c.CustBusPhone == customer.CustBusPhone);
-                if (customer != null) // found customer
-                {
-                    cust.CustHomePhone = customer.CustHomePhone;
-                    db.SaveChanges();
-                }
-            }
-        }
-
-        /// <summary>
         /// See if user name is free to use
         ///     case insensitive
         /// </summary>
@@ -197,15 +179,14 @@ namespace TravelExperts_Web_App.Models
 
         public static bool IsUniquePhone(string custPhone, out string error)
         {
+            error = "";
             using (AccountEntities db = new AccountEntities())
             {
                 var taken = db.AspNetUsers.SingleOrDefault(cust => cust.PhoneNumber == custPhone);
 
                 if (taken == null)
-                {
-                    error = "";
                     return true;
-                }
+
                 error = "An account is already linked to this phone number.";
                 return false;
             }

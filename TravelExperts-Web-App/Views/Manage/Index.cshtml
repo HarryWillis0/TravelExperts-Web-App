@@ -27,7 +27,11 @@
             <!-- email -->
             <div class="row">
                 @Html.LabelFor(m => m.Email, new { @class = "col-md-1" })
-                @Html.Label(Model.Email, null, new { @class = "col-md-1 col-md-offset-1", @id = "manageData" })
+                @{
+                    string email = Model.Email;
+                }
+                <label class="col-md-1 col-md-offset-1" id="manageData">@email</label>
+                @*@Html.Label(Model.Email, null, new { @class = "col-md-2 col-md-offset-1", @id = "manageData" }) DOESNT SHOW FULL EMAIL? JUST 'com'*@ 
                 @Html.ActionLink("[Edit]", "ChangeEmail", null, new { @class = "col-md-offset-1" })
             </div>
 
