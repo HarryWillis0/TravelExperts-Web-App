@@ -63,6 +63,8 @@ namespace TravelExperts_Web_App.Controllers
                 : message == ManageMessageId.EditPhoneSuccess ? "Phone number changed."
                 : message == ManageMessageId.EditAddressSuccess ? "Address changed."
                 : message == ManageMessageId.EditUserNameSuccess ? "User name changed."
+                : message == ManageMessageId.EditEmailSuccess ? "Email changed."
+                : message == ManageMessageId.EditAddressSuccess ? "Address changed."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
 
@@ -258,7 +260,7 @@ namespace TravelExperts_Web_App.Controllers
                 curr.CustPostal = model.NewPostal;
                 curr.CustCountry = model.NewCountry;
                 if (model.Update(curr))
-                    return RedirectToAction("Index", new { Message = ManageMessageId.EditPhoneSuccess });
+                    return RedirectToAction("Index", new { Message = ManageMessageId.EditAddressSuccess });
                 // something went wrong
                 return RedirectToAction("Index", new { Message = ManageMessageId.Error });
             }
@@ -270,7 +272,6 @@ namespace TravelExperts_Web_App.Controllers
             return View();
         }
 
-        // TO DO ADD VIEW
         // GET: /Manage/ChangeEmail
         /// <summary>
         /// Serve change email page
@@ -290,19 +291,40 @@ namespace TravelExperts_Web_App.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeEmail(ChangeEmailViewModel model)
         {
-            // TO DO - IMPLEMENT
-            throw new NotImplementedException();
+            if (TravelExpertsData.IsUniqueEmail(model.NewEmail, out string error)) 
+            {
+                Customer curr = GetCurrentCustomer();
+
+                // make sure we found customer
+                if (curr == null)
+                {
+                    ModelState.AddModelError(String.Empty, "Sorry an error occured while trying to find you. Please try log in again.");
+                    return View();
+                }
+
+                curr.CustEmail = model.NewEmail;
+                if(model.Update(curr))
+                    return RedirectToAction("Index", new { Message = ManageMessageId.EditEmailSuccess });
+
+                // something went wrong
+                return RedirectToAction("Index", new { Message = ManageMessageId.Error });
+            }
+            // an account is already linked
+            if (!string.IsNullOrEmpty(error))
+                ModelState.AddModelError(string.Empty, "An account is already linked to this email.");
+
+            return View();
         }
 
 
-        //
+        // auto-generated
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
             return View();
         }
 
-        //
+        //auto-generated
         // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -406,7 +428,8 @@ namespace TravelExperts_Web_App.Controllers
             Error,
             EditPhoneSuccess,
             EditAddressSuccess,
-            EditUserNameSuccess
+            EditUserNameSuccess,
+            EditEmailSuccess
         }
 
 #endregion

@@ -4,13 +4,18 @@
     ViewBag.Title = "ChangeAddress";
 }
 
+<!--
+    Change address form
+    Author - harry
+-->
+
 <h2>Change your address</h2>
 
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -63,7 +68,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to Account", "Index")
 </div>
 
 @section Scripts {

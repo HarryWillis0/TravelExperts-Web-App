@@ -258,12 +258,47 @@ namespace TravelExperts_Web_App.Models
     /// @author - Harry
     public class ChangeEmailViewModel
     {
-        [Required(ErrorMessage = "Old email is required.")]
-        [StringLength(50, ErrorMessage = "Old email too long.")]
-        public string OldEmail { get; set; }
-
         [Required(ErrorMessage = "New email is required.")]
         [StringLength(50, ErrorMessage = "New email too long.")]
         public string NewEmail { get; set; }
+
+        /// <summary>
+        /// Update customer with new email
+        /// </summary>
+        /// <param name="customer">updated customer</param>
+        /// <returns>True on success, false otherwise</returns>
+        public bool Update(Customer customer) 
+        {
+            bool flag = false;
+            // update in customers table
+            using (TravelExpertsEntities db = new TravelExpertsEntities())
+            {
+                // get customer from Customer table by phone number
+                var cust = db.Customers.SingleOrDefault(c => c.CustBusPhone == customer.CustBusPhone);
+                if (cust != null) // found customer
+                {
+                    cust.CustEmail = customer.CustEmail;
+                    db.SaveChanges();
+                    flag = true;
+                }
+            }
+
+            // update in accounts table
+            using (AccountEntities db = new AccountEntities())
+            {
+                // get account 
+                var account = db.AspNetUsers.SingleOrDefault(accnt => accnt.PhoneNumber == customer.CustBusPhone);
+                if (account != null) // found account
+                {
+                    if (flag) // make sure customers table update succesfully
+                    {
+                        account.Email = customer.CustEmail;
+                        db.SaveChanges();
+                        return true;
+                    }
+                }
+                return false; // one or both failed
+            }
+        }
     }
 }
