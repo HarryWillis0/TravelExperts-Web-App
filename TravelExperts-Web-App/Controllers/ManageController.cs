@@ -61,7 +61,8 @@ namespace TravelExperts_Web_App.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.EditPhoneSuccess ? "Phone number changed."
-                : message == ManageMessageId.EditAddressSuccess? "Address changed."
+                : message == ManageMessageId.EditAddressSuccess ? "Address changed."
+                : message == ManageMessageId.EditUserNameSuccess ? "User name changed."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
 
@@ -77,7 +78,7 @@ namespace TravelExperts_Web_App.Controllers
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
-                UserName = User.Identity.GetUserName(),
+                UserName = curr.UserName,
                 FirstName = curr.CustFirstName,
                 LastName = curr.CustLastName,
                 Address = curr.CustAddress,
@@ -112,8 +113,22 @@ namespace TravelExperts_Web_App.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeUserName(ChangeUserNameViewModel model)
         {
-            // TO DO - IMPLEMENT
-            throw new NotImplementedException();
+            if (TravelExpertsData.IsUniqueUserName(model.NewUserName))
+            {
+                Customer curr = GetCurrentCustomer();
+
+                // make sure we found customer
+                if (curr == null)
+                {
+                    ModelState.AddModelError(String.Empty, "Sorry an error occured while trying to find you. Please try log in again.");
+                    return View();
+                }
+                curr.UserName = model.NewUserName;
+                TravelExpertsData.UpdateUserName(curr);
+                return RedirectToAction("Index", new { Message = ManageMessageId.EditUserNameSuccess });
+            }
+            ModelState.AddModelError(String.Empty, "Account is already linked to this user name.");
+            return View();
         }
 
         //
@@ -383,7 +398,8 @@ namespace TravelExperts_Web_App.Controllers
             RemovePhoneSuccess,
             Error,
             EditPhoneSuccess,
-            EditAddressSuccess
+            EditAddressSuccess,
+            EditUserNameSuccess
         }
 
 #endregion

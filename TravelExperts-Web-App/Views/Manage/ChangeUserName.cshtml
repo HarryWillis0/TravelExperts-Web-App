@@ -1,27 +1,28 @@
-﻿@model TravelExperts_Web_App.Models.ChangeHomePhoneViewModel
+﻿@model TravelExperts_Web_App.Models.ChangeUserNameViewModel
 
 @{
-    ViewBag.Title = "Change Home Phone";
+    ViewBag.Title = "ChangeUserName";
 }
 
-<!-- 
-    Change home phone form 
-    Author - harry 
+<!--
+    Change user name form
+    Author - harry
 -->
-<h2>Change your home phone number</h2>
+
+<h2>Change your user name</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.NewHomePhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.NewUserName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.NewHomePhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.NewHomePhoneNumber, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.NewUserName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NewUserName, "", new { @class = "text-danger" })
             </div>
         </div>
 
