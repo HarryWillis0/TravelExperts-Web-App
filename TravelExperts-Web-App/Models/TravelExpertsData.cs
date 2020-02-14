@@ -179,9 +179,9 @@ namespace TravelExperts_Web_App.Models
 
         public static bool IsUniquePhone(string custPhone, out string error)
         {
-            using (TravelExpertsEntities db = new TravelExpertsEntities())
+            using (AccountEntities db = new AccountEntities())
             {
-                var taken = db.Customers.SingleOrDefault(cust => cust.CustBusPhone == custPhone);
+                var taken = db.AspNetUsers.SingleOrDefault(cust => cust.PhoneNumber == custPhone);
 
                 if (taken == null)
                 {

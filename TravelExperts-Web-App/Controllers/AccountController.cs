@@ -204,7 +204,7 @@ namespace TravelExperts_Web_App.Controllers
                 }
 
                 // auto-generated - create User
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.CustEmail };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.CustEmail, PhoneNumber = model.CustBusPhone };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded) // registration in Accounts tables success
                 {
