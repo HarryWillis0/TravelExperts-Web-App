@@ -11,7 +11,7 @@
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 <p class="text-danger">@ViewBag.ErrorMsg</p>
-<div class="contatiner"> 
+<div class="container"> 
     <div class="panel panel-info">
         <div class="panel-heading">
             <h1 class="panel-title">@Html.DisplayFor(m => m.FirstName) @Html.DisplayFor(m => m.LastName)</h1>
@@ -19,25 +19,25 @@
         <div class="panel-body">
             <!-- user name -->
             <div class="row">
-                @Html.LabelFor(m => m.UserName, new { @class = "col-md-1" })
-                @Html.Label(Model.UserName, null, new { @class = "col-md-1 col-md-offset-1", @id = "manageData" })
+                @Html.LabelFor(m => m.UserName, new { @class = "col-md-2" })
+                @Html.Label(Model.UserName, null, new { @class = "col-md-1 ", @id = "manageData" })
                 @Html.ActionLink("[Edit]", "ChangeUserName", null, new { @class = "col-md-offset-1" })
             </div>
 
             <!-- email -->
             <div class="row">
-                @Html.LabelFor(m => m.Email, new { @class = "col-md-1" })
+                @Html.LabelFor(m => m.Email, new { @class = "col-md-2" })
                 @{
                     string email = Model.Email;
                 }
-                <label class="col-md-1 col-md-offset-1" id="manageData">@email</label>
+                <label class="col-md-1" id="manageData">@email</label>
                 @*@Html.Label(Model.Email, null, new { @class = "col-md-2 col-md-offset-1", @id = "manageData" }) DOESNT SHOW FULL EMAIL? JUST 'com'*@ 
                 @Html.ActionLink("[Edit]", "ChangeEmail", null, new { @class = "col-md-offset-1" })
             </div>
 
             <!-- home phone number (can be null)-->
             <div class="row">
-                @Html.LabelFor(m => m.HomePhone, new { @class = "col-md-1" })
+                @Html.LabelFor(m => m.HomePhone, new { @class = "col-md-2" })
                 @{ 
                     string phoneNumber = "";
                     if (!string.IsNullOrEmpty(Model.HomePhone))
@@ -45,23 +45,23 @@
                         phoneNumber = Model.HomePhone;
                     }
                 }
-                <label class="col-md-1 col-md-offset-1" id="manageData">@phoneNumber</label>
+                <label class="col-md-1" id="manageData">@phoneNumber</label>
 
                 @Html.ActionLink("[Edit]", "ChangeHomePhone", null, new { @class = "col-md-offset-1" })
             </div>
 
             <!-- business phone number -->
             <div class="row">
-                @Html.LabelFor(m => m.BusPhone, new { @class = "col-md-1" })
-                @Html.Label(Model.BusPhone, null, new { @class = "col-md-1 col-md-offset-1", @id = "manageData" })
+                @Html.LabelFor(m => m.BusPhone, new { @class = "col-md-2" })
+                @Html.Label(Model.BusPhone, null, new { @class = "col-md-1", @id = "manageData" })
                 @Html.ActionLink("[Edit]", "ChangeBusPhone", null, new { @class = "col-md-offset-1" })
             </div>
 
             <!-- address -->
             <div class="row">
-                @Html.LabelFor(m => m.Address, new { @class = "col-md-1" })
+                @Html.LabelFor(m => m.Address, new { @class = "col-md-2" })
 
-                @Html.Label(Model.Address, null, new { @class = "col-md-2 col-md-offset-1", @id = "manageData" })
+                @Html.Label(Model.Address, null, new { @class = "col-md-2", @id = "manageData" })
             </div>
 
             <!-- city province -->
@@ -86,8 +86,8 @@
 
             <!-- password -->
             <div class="row">
-                <label class="col-md-1">Password:</label>
-                @Html.ActionLink("[Edit]", "ChangePassword", null, new { @class = "col-md-offset-3"})
+                <label class="col-md-2">Password:</label>
+                @Html.ActionLink("[Edit]", "ChangePassword", null, new { @class = "col-md-offset-2"})
             </div>
         </div> <!-- end div panel-body -->
     </div> <!-- end div panel -->
