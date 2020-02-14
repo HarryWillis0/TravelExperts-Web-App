@@ -118,11 +118,6 @@ namespace TravelExperts_Web_App.Models
     /// @author - Harry
     public class ChangeHomePhoneViewModel
     {
-        [Required(ErrorMessage = "Old phone number required.")]
-        [StringLength(20, ErrorMessage = "Phone number too long.")]
-        [Display(Name = "Old Home Phone Number")]
-        public string OldHomePhoneNumber { get; set; }
-
         [StringLength(20, ErrorMessage = "Phone number too long.")]
         [Display(Name = "New Home Phone Number")]
         public string NewHomePhoneNumber { get; set; }
@@ -134,11 +129,6 @@ namespace TravelExperts_Web_App.Models
     /// @author - Harry
     public class ChangeBusPhoneViewModel
     {
-        [Required(ErrorMessage = "Old phone number required.")]
-        [StringLength(20, ErrorMessage = "Old phone number too long.")]
-        [Display(Name = "Old Businness Phone Number")]
-        public string OldBusPhoneNumber { get; set; }
-
         [Required(ErrorMessage = "New phone number required.")]
         [StringLength(20, ErrorMessage = "New phone number too long.")]
         [Display(Name = "New Business Phone Number")]

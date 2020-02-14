@@ -34,11 +34,16 @@
             <!-- home phone number (can be null)-->
             <div class="row">
                 @Html.LabelFor(m => m.HomePhone, new { @class = "col-md-1" })
-                @if (!string.IsNullOrEmpty(Model.HomePhone))
-                {
-                    Html.Label(Model.HomePhone, null, new { @class = "col-md-1 col-md-offset-1", @id = "manageData" });
+                @{ 
+                    string phoneNumber = "";
+                    if (!string.IsNullOrEmpty(Model.HomePhone))
+                    {
+                        phoneNumber = Model.HomePhone;
+                    }
                 }
-                @Html.ActionLink("[Edit]", "ChangeHomePhone", null, new { @class = "col-md-offset-3" })
+                <label class="col-md-1 col-md-offset-1" id="manageData">@phoneNumber</label>
+
+                @Html.ActionLink("[Edit]", "ChangeHomePhone", null, new { @class = "col-md-offset-1" })
             </div>
 
             <!-- business phone number -->
@@ -80,9 +85,9 @@
                 <label class="col-md-1">Password:</label>
                 @Html.ActionLink("[Edit]", "ChangePassword", null, new { @class = "col-md-offset-3"})
             </div>
-              
-    </div>
-</div>
+        </div> <!-- end div panel-body -->
+    </div> <!-- end div panel -->
+</div> <!-- end div container-->
 @*
         <hr />
         <dl class="dl-horizontal">

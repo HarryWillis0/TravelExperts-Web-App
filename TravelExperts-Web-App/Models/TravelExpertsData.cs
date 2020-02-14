@@ -94,7 +94,7 @@ namespace TravelExperts_Web_App.Models
         /// <summary>
         /// Update a customer's email in AspNetUsers table and Customers table
         /// </summary>
-        /// <param name="customer"></param>
+        /// <param name="customer">Customer to update</param>
         public static void UpdateEmail(Customer customer)
         {
             using (AccountEntities db = new AccountEntities())
@@ -119,7 +119,25 @@ namespace TravelExperts_Web_App.Models
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Update a customer's email in AspNetUsers table and Customers table
+        /// </summary>
+        /// <param name="customer">Customer to update</param>
+        public static void UpdateHomePhone(Customer customer)
+        {
+            using (TravelExpertsEntities db = new TravelExpertsEntities())
+            {
+                // get customer from Customer table by phone number
+                var cust = db.Customers.SingleOrDefault(c => c.CustBusPhone == customer.CustBusPhone);
+                if (customer != null) // found customer
+                {
+                    cust.CustHomePhone = customer.CustHomePhone;
+                    db.SaveChanges();
+                }
+            }
+        }
+
         /// <summary>
         /// See if user name is free to use
         ///     case insensitive

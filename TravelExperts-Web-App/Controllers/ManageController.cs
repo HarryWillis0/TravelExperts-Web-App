@@ -60,18 +60,14 @@ namespace TravelExperts_Web_App.Controllers
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
+                : message == ManageMessageId.EditPhoneSuccess ? "Phone number changed."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
 
-            var userId = User.Identity.GetUserId();
-
-            // get current customer email
-            string email = TravelExpertsData.GetEmailInAccount(userId);
-
             // get current customer by email
-            Customer curr = TravelExpertsData.GetCustomer(email);
+            Customer curr = GetCurrentCustomer();
 
-            if (email == null || curr == null) // couldn't find account or user
+            if (curr == null) // couldn't find account or user
             {
                 ViewBag.ErrorMsg = "We're sorry, an error has occured while trying to get your information.";
                 return View();
@@ -139,8 +135,23 @@ namespace TravelExperts_Web_App.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeHomePhone(ChangeHomePhoneViewModel model)
         {
-            // TO DO - IMPLEMENT
-            throw new NotImplementedException();
+            string error = "";
+            if(Validator.IsCanadianPhoneNumber(model.NewHomePhoneNumber, out error))
+            {
+                Customer curr = GetCurrentCustomer();
+
+                // make sure we found customer
+                if (curr == null) 
+                {
+                    ModelState.AddModelError(String.Empty, "Sorry an error occured while trying to find you. Please try log in again.");
+                    return View();
+                }
+                curr.CustHomePhone = model.NewHomePhoneNumber;
+                TravelExpertsData.UpdateHomePhone(curr);
+                return RedirectToAction("Index", new { Message = ManageMessageId.EditPhoneSuccess });
+            }
+            ModelState.AddModelError(String.Empty, "Invalid phone number.");
+            return View();
         }
 
         //
@@ -258,7 +269,25 @@ namespace TravelExperts_Web_App.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
+        /// <summary>
+        /// get current customer
+        /// </summary>
+        /// @author Harry
+        private Customer GetCurrentCustomer() 
+        {
+            var userId = User.Identity.GetUserId();
+
+            // get current customer email
+            string email = TravelExpertsData.GetEmailInAccount(userId);
+
+            if (email == null)
+                return null;
+
+            // get current customer by email
+            return TravelExpertsData.GetCustomer(email);
+        }
+
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -306,7 +335,8 @@ namespace TravelExperts_Web_App.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error
+            Error,
+            EditPhoneSuccess
         }
 
 #endregion
