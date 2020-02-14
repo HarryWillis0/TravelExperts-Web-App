@@ -260,6 +260,7 @@ namespace TravelExperts_Web_App.Models
     {
         [Required(ErrorMessage = "New email is required.")]
         [StringLength(50, ErrorMessage = "New email too long.")]
+        [Display(Name = "New Email")]
         public string NewEmail { get; set; }
 
         /// <summary>
