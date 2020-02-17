@@ -1,0 +1,85 @@
+﻿@model TravelExperts_Web_App.Models.BookingDetailsViewModel
+
+@{
+    ViewBag.Title = "BookingDetails";
+}
+
+<h2>Your Booking Details</h2>
+
+<!-- details -->
+<div class="container">
+    <hr />
+    @{  
+        int curr = 0;
+        foreach (BookingDetail detail in Model.Details)
+        {
+            <!-- details -->
+            <div class="panel panel-info col-md-6">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Trip to @detail.Destination</h1>
+                </div>
+                <div class="panel-body">
+                    <!-- description -->
+                    <div class="row">
+                        <label class="col-md-6" id="bookingLabelFor">Description</label>
+                        @Html.Label(detail.Description, null, new { @class = "col-md-6", @id = "manageData" })
+                    </div>
+                    <!-- destination -->
+                    <div class="row">
+                        <label class="col-md-6" id="bookingLabelFor">Destination</label>
+                        @Html.Label(detail.Destination, null, new { @class = "col-md-6", @id = "manageData" })
+                    </div>
+                    <!-- trip start -->
+                    <div class="row">
+                        <label class="col-md-6" id="bookingLabelFor">Trip Start</label>
+                        <label id="manageData" class="col-md-6">@Html.DisplayFor(m => m.Details[curr].TripStart)</label>
+                    </div>
+                    <!-- trip end -->
+                    <div class="row">
+                        <label class="col-md-6" id="bookingLabelFor">Trip End</label>
+                        <label id="manageData" class="col-md-6">@Html.DisplayFor(m => m.Details[curr].TripEnd)</label>
+                    </div>
+                </div>
+            </div>
+            <!-- fees -->
+            <div class="panel panel-info col-md-6">
+                <div class="panel-heading">
+                    <h1 class="panel-title">@detail.Destination Fees</h1>
+                </div>
+                <div class="panel-body">
+                    <!-- base price -->
+                    <div class="row">
+                        <label class="col-md-6" id="bookingLabelFor">Price</label>
+                        <label id="manageData" class="col-md-6">@Html.DisplayFor(m => m.Details[curr].BasePrice)</label>
+                    </div>
+                    <!-- fee name and amount-->
+                    <div class="row">
+                        <label class="col-md-6" id="bookingLabelFor">@Model.Fees[curr].FeeName</label>
+                        <label id="manageData" class="col-md-6">@Html.DisplayFor(m => m.Fees[curr].FeeAmt)</label>
+                    </div>
+                    <div class="row">
+                        <!-- fee description -->
+                        @{
+                            if (Model.Fees[curr].FeeDesc != null)
+                            {
+                                @Html.Label(Model.Fees[curr].FeeDesc, null, new { @class = "col-md-6", @id = "manageData" })
+                            }
+                        }
+                    </div>
+                    <div class="row">
+                        <label class="col-md-6" id="bookingLabelFor">Total Owing</label>
+                        @{ 
+                            Model.TotalOwing = detail.BasePrice + Model.Fees[curr].FeeAmt;
+                            curr++;
+                        }
+                        <label id="manageData" class="col-md-6">@Html.DisplayFor(m => m.TotalOwing)</label>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        }
+     }
+</div>
+<p>
+    @Html.ActionLink("Back to Account", "Index")
+</p>

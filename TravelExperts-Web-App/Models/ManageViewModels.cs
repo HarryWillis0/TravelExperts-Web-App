@@ -27,8 +27,8 @@ namespace TravelExperts_Web_App.Models
         public string Email { get; set; }
         [Display(Name = "User Name")]
         public string UserName { get; set; }
+        public List<Booking> Bookings { get; set; }
     }
-
     public class ManageLoginsViewModel
     {
         public IList<UserLoginInfo> CurrentLogins { get; set; }
@@ -301,5 +301,17 @@ namespace TravelExperts_Web_App.Models
                 return false; // one or both failed
             }
         }
+    }
+
+    /// <summary>
+    /// Model for showing booking detials including fees
+    /// </summary>
+    /// @author - Harry
+    public class BookingDetailsViewModel
+    {
+        public List<BookingDetail> Details { get; set; }
+        public List<Fee> Fees { get; set; }
+        [DisplayFormat(DataFormatString = "{0:c2}")]
+        public decimal? TotalOwing { get; set; }
     }
 }
