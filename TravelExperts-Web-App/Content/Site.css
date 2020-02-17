@@ -1,7 +1,6 @@
 ﻿@import url('Site.css');
 body {
     padding-top: 50px;
-    padding-bottom: 20px;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -26,4 +25,15 @@ textarea {
 
 #manageData {
     font-weight: 400;
+}
+
+footer {
+    text-align:center;
+}
+
+/* Customize container */
+@media (min-width: 768px) {
+    .registration, .login {
+        max-width: 730px;
+    }
 }
