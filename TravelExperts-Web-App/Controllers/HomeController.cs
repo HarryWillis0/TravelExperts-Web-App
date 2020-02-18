@@ -22,7 +22,7 @@ namespace TravelExperts_Web_App.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Contact Us: ";
 
             return View();
         }
