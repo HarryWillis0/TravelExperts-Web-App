@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TravelExperts_Web_App.Models;
 
 namespace TravelExperts_Web_App.Controllers
 {
@@ -10,6 +12,14 @@ namespace TravelExperts_Web_App.Controllers
     {
         public ActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                // get current customer by email
+                Customer curr = GetCurrentCustomer();
+                ViewBag.Message = "Welcome back " + curr.CustFirstName + "!";
+            }
+            else
+                ViewBag.Message = "Login or Register to access your vacation packages";
             return View();
         }
 
@@ -26,5 +36,25 @@ namespace TravelExperts_Web_App.Controllers
 
             return View();
         }
+
+        #region helpers
+        /// <summary>
+        /// get current customer
+        /// </summary>
+        /// @author Harry
+        private Customer GetCurrentCustomer()
+        {
+            var userId = User.Identity.GetUserId();
+
+            // get current customer email
+            string email = TravelExpertsData.GetEmailInAccount(userId);
+
+            if (email == null)
+                return null;
+
+            // get current customer by email
+            return TravelExpertsData.GetCustomer(email);
+        }
+        #endregion
     }
 }

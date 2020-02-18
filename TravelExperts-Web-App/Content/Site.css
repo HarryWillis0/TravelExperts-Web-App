@@ -135,3 +135,7 @@ footer {
 .btn-log-reg:hover {
     background: #ffbe96;
 }
+
+#text-alicblue {
+    color: aliceblue;
+}
