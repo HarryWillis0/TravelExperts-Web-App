@@ -7,10 +7,11 @@
 
     author  - harry
 -->
-<h2 id="text-alicblue">Account Management</h2>
+<h2 class="text-alicblue">Account Management</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 <p class="text-danger">@ViewBag.ErrorMsg</p>
+@*<a href="~/Views/Manage/Index.cshtml">~/Views/Manage/Index.cshtml</a>*@
 <div class="container">
     <div class="panel panel-info">
         <div class="panel-heading">
@@ -96,13 +97,12 @@
         </div> <!-- end div panel-body -->
     </div> <!-- end div panel -->
 </div> <!-- end account management div container -->
-
 <!-- customer packages section -->
-<h2 id="text-alicblue">Your Bookings</h2>
+<h2 class="text-alicblue">Your Bookings</h2>
 
 @{
-// get customer bookings
- }
+    // get customer bookings
+}
 
 <div class="container">
     @{
@@ -111,7 +111,7 @@
         //      so we have to check each one
         foreach (Booking booking in Model.Bookings)
         {
-            <div class="panel panel-info col-md-6">
+            <div class="panel panel-info col-sm-6 booking-panels">
                 <div class="panel-heading">
                     <h1 class="panel-title">Booking Number: @Html.Label(booking.BookingNo)</h1>
                 </div>
@@ -123,14 +123,15 @@
                             // check if null
                             if (Model.Bookings[curr].BookingDate == null)
                             {
-                                <label class="col-md-6" id="manageData">No info</label>
+                                <label class="col-md-5" id="manageData">No info</label>
                             }
                             else
                             {
-                                <label class="col-md-6" id="manageData">@Html.DisplayFor(m => m.Bookings[curr].BookingDate)</label>
+                                <label class="col-md-5" id="manageData">@Html.DisplayFor(m => m.Bookings[curr].BookingDate)</label>
                             }
                         }
                     </div>
+
                     <!-- traveler count -->
                     <div class="row">
                         <label class="col-md-6" id="bookingLabelFor">Traveler Count</label>
@@ -160,25 +161,25 @@
                                 switch (booking.TripTypeId)
                                 {
                                     case ("B"):
-                                    <label class="col-md-6" id="manageData">Business</label>
+                                        <label class="col-md-6" id="manageData">Business</label>
                                         break;
                                     case ("L"):
-                                    <label class="col-md-6" id="manageData">Leisure</label>
+                                        <label class="col-md-6" id="manageData">Leisure</label>
                                         break;
                                     case ("G"):
-                                    <label id="col-md-6">Group</label>
-                                            break;
-                                    }
+                                        <label id="col-md-6">Group</label>
+                                        break;
                                 }
                             }
+                        }
                     </div>
                     <div class="row">
-                        @Html.ActionLink("Details", "BookingDetails", new { bookingNo = booking.BookingNo }, new { @class="col-md-6" })
+                        @Html.ActionLink("Details", "BookingDetails", new { bookingNo = booking.BookingNo }, new { @class = "col-md-6" })
                     </div>
                 </div>
             </div>
             curr++;
         }
-     }
+    }
 </div>
 

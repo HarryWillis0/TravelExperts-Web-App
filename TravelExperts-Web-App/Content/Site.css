@@ -118,7 +118,7 @@ footer {
     font-size: 24px;
 }
 
-.btn-log-reg {
+.btn-log-reg, .edit-save {
     font-weight: 500;
     font-size: 16px;
     letter-spacing: 1px;
@@ -136,6 +136,17 @@ footer {
     background: #ffbe96;
 }
 
-#text-alicblue {
+.text-alicblue {
     color: aliceblue;
+}
+
+.booking-panels{
+    margin: 2%;
+    width: 46%;
+}
+
+@media (max-width: 600px) {
+    .booking-panels {
+        width: 100%;
+    }
 }
