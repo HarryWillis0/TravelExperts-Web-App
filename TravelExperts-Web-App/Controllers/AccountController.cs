@@ -218,12 +218,12 @@ namespace TravelExperts_Web_App.Controllers
             // format phone number errors to be more informative
             if (!string.IsNullOrEmpty(homePhoneError))
             {
-                homePhoneError = $"{homePhoneError} (home phone number)";
+                homePhoneError = $"{homePhoneError} (home phone number)\n\teg. 4031234567";
                 ModelState.AddModelError(string.Empty, homePhoneError);
             }
             if (!string.IsNullOrEmpty(busPhoneError))
             {
-                busPhoneError = $"{busPhoneError} (business phone number)";
+                busPhoneError = $"{busPhoneError} (business phone number)\n\teg. 4031234567";
                 ModelState.AddModelError(string.Empty, busPhoneError);
             }
 
