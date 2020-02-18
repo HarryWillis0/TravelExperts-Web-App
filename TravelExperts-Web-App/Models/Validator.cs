@@ -21,7 +21,9 @@ namespace TravelExperts_Web_App.Models
         // @author - Yuri Khenokh http://regexlib.com/Search.aspx?k=canadian+phone+number&c=-1&m=-1&ps=20
         // private static string phoneRegex = @"^(?:(?:\+?1[\s])|(?:\+?1(?=(?:\()|(?:\d{10})))|(?:\+?1[\-](?=\d)))?(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?))[2-9]\d{2}[- ]?\d{4}$";
         
+        // a simple phone regex - only allow provincial area code and number
         private static string noBrack = @"^[1-9](\d{9})$";
+
         /// <summary>
         /// Check for a valid postal code
         /// </summary>
