@@ -16,7 +16,7 @@ namespace TravelExperts_Web_App.Controllers
             {
                 // get current customer by email
                 Customer curr = GetCurrentCustomer();
-                ViewBag.Message = "Welcome back " + curr.CustFirstName + "!";
+                ViewBag.Message = "Welcome " + curr.CustFirstName + "!";
             }
             else
                 ViewBag.Message = "Login or Register to access your vacation packages";
