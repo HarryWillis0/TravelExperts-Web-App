@@ -60,8 +60,12 @@
             <!-- address -->
             <div class="row">
                 @Html.LabelFor(m => m.Address, new { @class = "col-md-2" })
+                @{
+                    string address = Model.Address;
+                }
+                <label class="col-md-2" id="manageData">@address</label>
 
-                @Html.Label(Model.Address, null, new { @class = "col-md-2", @id = "manageData" })
+                @*@Html.Label(Model.Address, null, new { @class = "col-md-2" , style="display: inline-block;", @id = "manageData" }) CUTS OF TEXT? *@
             </div>
 
             <!-- city province -->
@@ -97,10 +101,84 @@
 <h2>Your Bookings</h2>
 
 @{
-    // get customer bookings
+// get customer bookings
  }
 
 <div class="container">
-    
+    @{
+        int curr = 0;
+        // create a panel for each booking and display its info -- all columns in bookings can be null (except for pk)
+        //      so we have to check each one
+        foreach (Booking booking in Model.Bookings)
+        {
+            <div class="panel panel-info col-md-6">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Booking Number: @Html.Label(booking.BookingNo)</h1>
+                </div>
+                <div class="panel-body">
+                    <!-- booking date -->
+                    <div class="row">
+                        <label class="col-md-6" id="bookingLabelFor">Booking Date</label>
+                        @{
+                            // check if null
+                            if (Model.Bookings[curr].BookingDate == null)
+                            {
+                                <label class="col-md-6" id="manageData">No info</label>
+                            }
+                            else
+                            {
+                                <label class="col-md-6" id="manageData">@Html.DisplayFor(m => m.Bookings[curr].BookingDate)</label>
+                            }
+                        }
+                    </div>
+                    <!-- traveler count -->
+                    <div class="row">
+                        <label class="col-md-6" id="bookingLabelFor">Traveler Count</label>
+                        @{
+                            // check if null
+                            if (Model.Bookings[curr].TravelerCount == null)
+                            {
+                                <label ="col-md-6" id="manageData">No info</label>
+                            }
+                            else
+                            {
+                                @Html.Label(booking.TravelerCount.ToString(), null, new { @class = "col-md-6", @id = "manageData" })
+                            }
+                        }
+                    </div>
+                    <!-- trip type -->
+                    <div class="row">
+                        <label class="col-md-6" id="bookingLabelFor">Trip Type</label>
+                        @{
+                            // check if null
+                            if (Model.Bookings[curr].TripTypeId == null)
+                            {
+                                <label class="col-md-6" id="manageData">No info</label>
+                            }
+                            else
+                            {
+                                switch (booking.TripTypeId)
+                                {
+                                    case ("B"):
+                                    <label class="col-md-6" id="manageData">Business</label>
+                                        break;
+                                    case ("L"):
+                                    <label class="col-md-6" id="manageData">Leisure</label>
+                                        break;
+                                    case ("G"):
+                                    <label id="col-md-6">Group</label>
+                                            break;
+                                    }
+                                }
+                            }
+                    </div>
+                    <div class="row">
+                        @Html.ActionLink("Details", "BookingDetails", new { bookingNo = booking.BookingNo }, new { @class="col-md-6" })
+                    </div>
+                </div>
+            </div>
+            curr++;
+        }
+     }
 </div>
 

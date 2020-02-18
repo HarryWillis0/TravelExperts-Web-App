@@ -26,5 +26,9 @@ namespace TravelExperts_Web_App
         }
     
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<BookingDetail> BookingDetails { get; set; }
+        public virtual DbSet<Booking> Bookings { get; set; }
+        public virtual DbSet<Package> Packages { get; set; }
+        public virtual DbSet<Fee> Fees { get; set; }
     }
 }

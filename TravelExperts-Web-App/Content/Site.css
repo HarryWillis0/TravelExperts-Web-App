@@ -64,6 +64,10 @@ textarea {
     font-weight: 400;
 }
 
+#bookingLabelFor {
+    font-weight: bold;
+}
+
 footer {
     text-align:center;
     color: aliceblue;

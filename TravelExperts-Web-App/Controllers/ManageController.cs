@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -77,6 +78,9 @@ namespace TravelExperts_Web_App.Controllers
                 return View();
             }
 
+            // get customer bookings
+            List<Booking> bookings = TravelExpertsData.GetBookings(curr);
+
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
@@ -90,7 +94,42 @@ namespace TravelExperts_Web_App.Controllers
                 Country = curr.CustCountry,
                 HomePhone = curr.CustHomePhone,
                 BusPhone = curr.CustBusPhone,
-                Email = curr.CustEmail
+                Email = curr.CustEmail,
+                Bookings = bookings
+            };
+            return View(model);
+        }
+
+        // GET: /Manage/BookingDetails
+        /// <summary>
+        /// Serve booking details page
+        /// </summary>
+        /// @author - Harry
+        public ActionResult BookingDetails(string bookingNo)
+        {
+            // make sure we have a booking number
+            if (bookingNo == null)
+                return RedirectToAction("Index");
+
+            // put booking number in bag
+            ViewBag.BookingNo = bookingNo;
+            // get customer
+            Customer curr = GetCurrentCustomer();
+
+            List<BookingDetail> details = TravelExpertsData.GetBookingDetails(curr, bookingNo);
+            List<Fee> fees = new List<Fee>();
+
+            // get each booking details fee
+            foreach (BookingDetail detail in details)
+            {
+                fees.Add(TravelExpertsData.GetFee(curr, detail.BookingDetailId));
+            }
+
+            // set up model
+            var model = new BookingDetailsViewModel
+            {
+                Details = details,
+                Fees = fees
             };
             return View(model);
         }

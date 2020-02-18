@@ -11,30 +11,23 @@ namespace TravelExperts_Web_App
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class Customer
+    using System.ComponentModel.DataAnnotations;
+
+    public partial class Fee
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Customer()
+        public Fee()
         {
-            this.Bookings = new HashSet<Booking>();
+            this.BookingDetails = new HashSet<BookingDetail>();
         }
     
-        public int CustomerId { get; set; }
-        public string CustFirstName { get; set; }
-        public string CustLastName { get; set; }
-        public string CustAddress { get; set; }
-        public string CustCity { get; set; }
-        public string CustProv { get; set; }
-        public string CustPostal { get; set; }
-        public string CustCountry { get; set; }
-        public string CustHomePhone { get; set; }
-        public string CustBusPhone { get; set; }
-        public string CustEmail { get; set; }
-        public Nullable<int> AgentId { get; set; }
-        public string UserName { get; set; }
+        public string FeeId { get; set; }
+        public string FeeName { get; set; }
+        [DisplayFormat(DataFormatString = "{0:c2}")]
+        public decimal FeeAmt { get; set; }
+        public string FeeDesc { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Booking> Bookings { get; set; }
+        public virtual ICollection<BookingDetail> BookingDetails { get; set; }
     }
 }

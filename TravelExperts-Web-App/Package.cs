@@ -12,27 +12,21 @@ namespace TravelExperts_Web_App
     using System;
     using System.Collections.Generic;
     
-    public partial class Customer
+    public partial class Package
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Customer()
+        public Package()
         {
             this.Bookings = new HashSet<Booking>();
         }
     
-        public int CustomerId { get; set; }
-        public string CustFirstName { get; set; }
-        public string CustLastName { get; set; }
-        public string CustAddress { get; set; }
-        public string CustCity { get; set; }
-        public string CustProv { get; set; }
-        public string CustPostal { get; set; }
-        public string CustCountry { get; set; }
-        public string CustHomePhone { get; set; }
-        public string CustBusPhone { get; set; }
-        public string CustEmail { get; set; }
-        public Nullable<int> AgentId { get; set; }
-        public string UserName { get; set; }
+        public int PackageId { get; set; }
+        public string PkgName { get; set; }
+        public Nullable<System.DateTime> PkgStartDate { get; set; }
+        public Nullable<System.DateTime> PkgEndDate { get; set; }
+        public string PkgDesc { get; set; }
+        public decimal PkgBasePrice { get; set; }
+        public Nullable<decimal> PkgAgencyCommission { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Booking> Bookings { get; set; }

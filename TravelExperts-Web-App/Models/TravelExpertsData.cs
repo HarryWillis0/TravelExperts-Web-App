@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -84,6 +85,11 @@ namespace TravelExperts_Web_App.Models
             }
         }
 
+        /// <summary>
+        /// Update a customer's email in Customers table
+        /// </summary>
+        /// <param name="customer">Customer to update</param>
+        /// <returns>True on success, false otherwise</returns>
         public static bool UpdateCustomerUserName (Customer newCustomer) 
         {
             // update customer table
@@ -102,7 +108,7 @@ namespace TravelExperts_Web_App.Models
         }
 
         /// <summary>
-        /// Update a customer's email in AspNetUsers table and Customers table
+        /// Update a customer's email in AspNetUsers table
         /// </summary>
         /// <param name="customer">Customer to update</param>
         /// <returns>True on success, false otherwise</returns>
@@ -137,6 +143,63 @@ namespace TravelExperts_Web_App.Models
                     return true;
                 }
                 return false; // one or both failed
+            }
+        }
+
+        /// <summary>
+        /// Get all bookings linked to a customer
+        /// </summary>
+        /// <param name="customerId">Customer object</param>
+        /// <returns>List of Bookings</returns>
+        public static List<Booking> GetBookings(Customer customer)
+        {
+            using (TravelExpertsEntities db = new TravelExpertsEntities())
+            {
+                // get customer and their bookings 
+                Customer customerAndBookings = db.Customers.Include("Bookings")
+                                        .Where(c => c.CustomerId == customer.CustomerId)
+                                        .SingleOrDefault();
+                return customerAndBookings.Bookings.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Get Booking details of a booking
+        /// </summary>
+        /// <param name="bookingNo">Booking number</param>
+        /// <param name="customer">Customer</param>
+        /// <returns>List of booing details</returns>
+        public static List<BookingDetail> GetBookingDetails(Customer customer, string bookingNo)
+        {
+            using (TravelExpertsEntities db = new TravelExpertsEntities()) 
+            {
+                // get customer with booking details loaded
+                var withDetails = db.Customers.Include("Bookings.BookingDetails")
+                                              .Where(c => c.CustomerId == customer.CustomerId)
+                                              .SingleOrDefault();
+                // get booking
+                Booking booking = withDetails.Bookings.Where(b => b.BookingNo == bookingNo).SingleOrDefault();
+
+                return booking.BookingDetails.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Get fees associated to a booking detail
+        /// </summary>
+        /// <param name="detailId">booking detail identification</param>
+        /// <param name="customer">Customer object</param>
+        /// <returns>FEe object</returns>
+        public static Fee GetFee(Customer customer, int detailId)
+        {
+            using (TravelExpertsEntities db = new TravelExpertsEntities()) 
+            {
+                // get customer with fee loaded
+                var detail = db.BookingDetails.Include("Fee")
+                                .Where(d => d.BookingDetailId == detailId)
+                                .SingleOrDefault();
+
+                return detail.Fee;
             }
         }
 
@@ -189,6 +252,11 @@ namespace TravelExperts_Web_App.Models
             }
         }
 
+        /// <summary>
+        /// Retrieve customer by email
+        /// </summary>
+        /// <param name="email">email of customer</param>
+        /// <returns>Customer object</returns>
         public static Customer GetCustomer(string email)
         {
             using (TravelExpertsEntities db = new TravelExpertsEntities())
@@ -197,6 +265,12 @@ namespace TravelExperts_Web_App.Models
             }
         }
 
+        /// <summary>
+        /// See if phone number is unique in Accounts table
+        /// </summary>
+        /// <param name="custPhone"></param>
+        /// <param name="error"></param>
+        /// <returns></returns>
         public static bool IsUniquePhone(string custPhone, out string error)
         {
             error = "";
