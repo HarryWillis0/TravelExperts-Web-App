@@ -5,8 +5,12 @@ body {
     background-size: cover;
     background-attachment: fixed;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 2em;
 }
 
+.navbar-brand {
+    font-size: 1.5em;
+}
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
@@ -49,9 +53,6 @@ img {
     color: white;
 }
 
-footer p{
-    float:
-}
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
